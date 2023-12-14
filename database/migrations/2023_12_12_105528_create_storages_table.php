@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('storages', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->decimal('address');
+            $table->string('address');
             $table->timestamps();
         });
     }

@@ -16,10 +16,13 @@ return new class extends Migration
             $table->string('title');
             $table->decimal('price');
 
-            $table->string('provider_id');
-            $table->string('storage_id');
+            $table->uuid('provider_id');
+            $table->uuid('storage_id');
 
             $table->timestamps();
+
+            $table->foreign('provider_id')->references('id')->on('providers')->onDelete('cascade');
+            $table->foreign('storage_id')->references('id')->on('storages')->onDelete('cascade');
         });
     }
 
@@ -28,6 +31,11 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropForeign(['provider_id']);
+            $table->dropForeign(['storage_id']);
+        });
+
         Schema::dropIfExists('products');
     }
 };

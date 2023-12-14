@@ -9,4 +9,14 @@ use Illuminate\Database\Eloquent\Model;
 class Provider extends Model
 {
     use HasFactory, UUID;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+        'address',
+    ];
 }

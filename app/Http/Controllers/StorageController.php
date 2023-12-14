@@ -2,64 +2,81 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\StorageResource;
 use App\Models\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class StorageController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Show Storages
+     *
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public function index()
     {
-        //
+        return Storage::query()->paginate(10);
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
+     * Show Storage by id
+     *
+     * @param Storage $storage
+     * @return StorageResource
      */
     public function show(Storage $storage)
     {
-        //
+        return new StorageResource($storage);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Store Storage
+     *
+     * @param Request $request
+     * @return StorageResource|\Illuminate\Http\JsonResponse
      */
-    public function edit(Storage $storage)
+    public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), ['address' => 'required|string']);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $storage = Storage::create(['address' => $request->address]);
+
+        return new StorageResource($storage);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update Storage by id
+     *
+     * @param Request $request
+     * @param Storage $storage
+     * @return StorageResource|\Illuminate\Http\JsonResponse
      */
     public function update(Request $request, Storage $storage)
     {
-        //
+        $validator = Validator::make($request->all(), ['address' => 'required|string']);
+
+        if ($validator->fails()) return response()->json(['errors' => $validator->errors()], 422);
+
+        $storage->update(['address' => $request->address]);
+
+        return new StorageResource($storage);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Destroy Storage by id
+     *
+     * @param \App\Models\Storage $storage
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Storage $storage)
     {
-        //
+        $storage->delete();
+
+        return response()->json(['message' => 'Storage deleted successfully.']);
     }
 }
