@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Validator;
 
 class StorageController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     /**
      * Show Storages
      *

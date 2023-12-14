@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\StorageController;
@@ -18,11 +19,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
 
 Route::apiResource('users', UserController::class);
 Route::apiResource('storages', StorageController::class);
 Route::apiResource('products', ProductController::class);
 Route::apiResource('providers', ProviderController::class);
+
+Route::post('login', [AuthController::class, 'login'])->name('login');
+Route::post('register',  [AuthController::class, 'register'])->name('register');
+Route::post('logout',  [AuthController::class, 'logout'])->name('logout');
+Route::post('refresh',  [AuthController::class, 'refresh'])->name('refresh');
